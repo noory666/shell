@@ -1,0 +1,40 @@
+#!/bin/bash
+for file in "main.md" "user.md" "devices.md"; do 
+    [ -f "$file" ] && rm "$file"
+done
+
+echo "Main Info..."
+printf "BIOS:\n" > main.md
+echo $(dmidecode) >> main.md
+printf "OS:\n" >> main.md
+echo $(cat /etc/*release) >> main.md
+printf "Kernel:\n" >> main.md
+printf "UName:\n$(uname -a)\n" >> main.md
+printf "Modules:\n$(lsmod)\n" >> main.md
+printf "NameSpaces:\n$(lsns)\n" >> main.md
+printf "Dmesg:\n$(dmesg)\n" >> main.md
+printf "Vars:\n" >> main.md
+printf "Environment:\n$(set)\n" >> main.md
+printf "System: \n $(sysctl -a) \n " >> main.md
+
+echo "User Info..."
+printf "Current User Info:\nusername: $(whoami)\nuptime:\n$(cat /proc/uptime)\n$(id | tr ' ' '\n')" > user.md
+printf "Passwd File:\n$(cat /etc/passwd)\n" >> user.md
+printf "Logins:\n$(lslogins)\n" >> user.md
+printf "Recent Logins\n$(last)\n" >> user.md
+printf "Who is doing What:\n$(w)\n" >> user.md
+
+echo "Device Info..."
+printf "CPU:\n" > devices.md
+printf "CPU General:\n$(lscpu)\n" >> devices.md
+printf "CPU Detailed:\n$(cat /proc/cpuinfo)\n" >> devices.md
+printf "Memory:\n"
+printf "Physical Memory:\n$(lsmem)\n" >> devices.md
+printf "Virtual Memory:\n$(vmstat)\n" >> devices.md
+printf "Devices:\n" >> devices.md
+printf "Devices USB:\n$(lsusb)\n" >> devices.md
+printf "Devices PCI:\n$(lspci)\n" >> devices.md
+printf "Devices IPC: \n $(lsipc) \n " >> devices.md
+printf "Disk:\n" >> devices.md
+printf "Disk List:\n$(lsblk)\n" >> devices.md
+printf "Disk Usage: \n $(df -h | egrep -v 'none') \n " >> devices.md
